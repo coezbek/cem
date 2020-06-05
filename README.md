@@ -30,7 +30,8 @@ crequire is a replacement for require for situations where bundler would be over
 
 For example when you want to require 'qml' from the 'ruby-qml' gem, use the following line:
 
-```crequire 'qml', 'ruby-qml'```
+```crequire 'qml', 'ruby-qml'
+```
 
 This will attempt to require qml and if it can't be found in the local RubyGems, then it will try to `gem install ruby-qml`
 
@@ -38,10 +39,11 @@ This will attempt to require qml and if it can't be found in the local RubyGems,
 
 Monkey patches array to return an enumeration which prints progress while lazy evaluating the enumeration.
 
-require 'cem'
+```require 'cem'
 [a,b,c].with_progress.each { |x|
   puts x
 }
+```
 
 Uses the [https://github.com/paul/progress_bar](progress_bar gem).
 
