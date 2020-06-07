@@ -7,8 +7,8 @@
 # - Some Numeric hackery
 #
 
-def min(a,b)
-  return a < b ? a : b
+def min(a, b)
+  return a <= b ? a : b
 end
 
 class Numeric
@@ -113,6 +113,10 @@ Point2D = Struct.new("Point2D", :x, :y) {
   # def <=>(other)
   #   y == other.y ? x <=> other.x : y <=> other.y
   # end
+  
+  def ==(other)
+    y == other.y && x == other.x
+  end
 }
 
 Seg2D = Struct.new("Seg2D", :p1, :p2) {
@@ -506,13 +510,5 @@ Point3D = Struct.new("Point3D", :x, :y, :z) {
 }
     
     
-def isHTML5Element(element)
 
-  # https://html.spec.whatwg.org/#elements-3
-
-  @valid_elements ||= %w(a abbr address area article aside audio b base bdi bdo blockquote body br button canvas caption cite code col colgroup data datalist dd del details dfn dialog div dl dt em embed fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hgroup hr html i iframe img input ins kbd label legend li link main map mark math menu meta meter nav noscript object ol optgroup option output p param picture pre progress q rp rt ruby s samp script section select slot small source span strong style sub summary sup svg table tbody td template textarea tfoot th thead time title tr track u ul var video wbr)
-    
-  return @valid_elements.include?(element.to_s.downcase)
-
-end
     
