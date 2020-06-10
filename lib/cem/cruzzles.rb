@@ -37,6 +37,7 @@ Point2D = Struct.new("Point2D", :x, :y) {
     end
   end
   
+  # Scalar multiplication
   def *(other)
     Point2D.new(x * other, y * other)    
   end
@@ -45,6 +46,7 @@ Point2D = Struct.new("Point2D", :x, :y) {
     return (x - other.x).abs + (y - other.y).abs
   end
   
+  # returns the euclidean distance to the given Point2D
   def dist(other)
     return ((x - other.x) ** 2 + (y - other.y) ** 2).sqrt
   end

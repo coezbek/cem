@@ -4,18 +4,6 @@ This gem is an assorted collection of common helpers that I use in a lot of proj
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'cem'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
     $ gem install cem
 
 ## Usage
@@ -26,19 +14,19 @@ Key things includes:
 
 ### crequire
 
-crequire is a replacement for require for situations where bundler would be overkill. It solves the frustration of having to manually install gems to run a particular ruby script which requires other gems. 
+`crequire` is a replacement for `require` for situations where bundler would be overkill. It solves the frustration of having to manually install gems to run a particular ruby script which requires other gems. 
 
-For example when you want to require 'qml' from the 'ruby-qml' gem, use the following line:
+For example when you want to require `qml` from the `ruby-qml` gem, use the following line:
 
 ```
 crequire 'qml', 'ruby-qml'
 ```
 
-This will attempt to require qml and if it can't be found in the local RubyGems, then it will try to `gem install ruby-qml`
+This will attempt to require `qml` and if it can't be found in the local RubyGems, then it will try to `gem install ruby-qml`
 
 ### Array::with_progress
 
-Monkey patches array to return an enumeration which prints progress while lazy evaluating the enumeration.
+Monkey patches `Array` to return an enumeration which prints progress while lazy evaluating the enumeration.
 
 ```
 require 'cem'
@@ -59,7 +47,7 @@ Defines integer based `Point2D`, `Seg2D` (line segment), `Dir2D` (relative direc
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rspec` to run the tests. 
 
 To install this gem onto your local machine, run `bundle exec rake install`. 
 
@@ -71,7 +59,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/coezbe
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The gem is available as permissive open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 ## What's with the name?
 
