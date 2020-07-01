@@ -2,7 +2,7 @@
 #
 # https://adventofcode.com/2018/day/13 part 1 and 2
 #
-# Demonstrates Point2D
+# Demonstrates Point2D. Certainly could use Grid!
 
 require 'cem'
   
