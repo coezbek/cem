@@ -7,9 +7,17 @@
 # - Some Numeric hackery
 #
 
-def min(a, b)
-  return a <= b ? a : b
+module Cem
+  def self.min(a, b)
+    return a <= b ? a : b
+  end
+
+  def self.max(a, b)
+    return a >= b ? a : b
+  end
 end
+
+extend Cem
 
 class Numeric
   # Make all methods in Math module available as methods for numeric (e.g. 3.sqrt instead of Math.sqrt(3))
@@ -37,6 +45,14 @@ Point2D = Struct.new("Point2D", :x, :y) {
     end
   end
   
+  def -(other)
+    if other.is_a? Array
+      other.map { |o| self - o }
+    else
+      Point2D.new(x - other.x, y - other.y)
+    end
+  end
+  
   # Scalar multiplication
   def *(other)
     Point2D.new(x * other, y * other)    
@@ -49,6 +65,10 @@ Point2D = Struct.new("Point2D", :x, :y) {
   # returns the euclidean distance to the given Point2D
   def dist(other)
     return ((x - other.x) ** 2 + (y - other.y) ** 2).sqrt
+  end
+  
+  def area
+    return x * y
   end
   
   def self.from_s(s)
@@ -66,6 +86,46 @@ Point2D = Struct.new("Point2D", :x, :y) {
       raise s
     end
     
+  end
+
+  # Returns the component-wise minimum as a new Point2D
+  #
+  #   Point2D.new(5,2).min(Point2D.new(1,3)) == Point2D.new(1,2) -> true
+  #
+  def min(other)
+    return self if !other
+    
+    if other.is_a? Array
+      other.reduce(self) { |min, o| min.min(o) }
+    else
+      Point2D.new(Cem.min(x, other.x), Cem.min(y, other.y))
+    end
+  end
+  
+  # Returns the component-wise maximum as a new Point2D
+  #
+  #   Point2D.new(5,2).min(Point2D.new(1,3)) == Point2D.new(5,3) -> true
+  #
+  def max(other)
+    return self if !other
+
+    if other.is_a? Array
+      other.reduce(self) { |max, o| max.max(o) }
+    else
+      Point2D.new(Cem.max(x, other.x), Cem.max(y, other.y))
+    end
+  end
+
+  # Returns the minimum and maximum coordinates of this and the given point/point array.  
+  def minmax(other)
+    [self.min(other), self.max(other)]
+  end
+  
+  # Returns the minimum and maximum coordinates of the point array. 
+  def self.minmax(array)
+    return [nil, nil] if !array || array.size == 0
+    
+    [array.reduce { |min, o| min.min(o) }, array.reduce { |max, o| max.max(o) } ]
   end
   
   def left 
@@ -112,11 +172,12 @@ Point2D = Struct.new("Point2D", :x, :y) {
     return result
   end
   
-  # def <=>(other)
-  #   y == other.y ? x <=> other.x : y <=> other.y
-  # end
+  def <=>(other)
+    y == other.y ? x <=> other.x : y <=> other.y
+  end
   
   def ==(other)
+    return false if !other.respond_to?(:x) || !other.respond_to?(:y)
     y == other.y && x == other.x
   end
 }
@@ -223,12 +284,43 @@ class Grid
       # @data = [[default] * x] * y
     end
   end
-  
+
   def initialize_copy(orig)
     super
     
     @data = Marshal.load(Marshal.dump(orig.data))
     # Do custom initialization for self
+  end
+  
+  #
+  # Given a list of Point2D, will create a Grid that contains all points.
+  #
+  # By default the grid will be recentered using the 'bottomleft'-most point.
+  # Set :bounding_box to false to get coordinates transferred as is.
+  #
+  # By default all cells for which points are found are marked with an 'x'. 
+  # Set :char to another character or supply a block which receives the point and should return the character to use.
+  #
+  # By default the empty cells are filled with spaces. Set :empty to something else to change this.
+  #  
+  def self.from_points(point_array, bounding_box=true, char='x', empty=' ', &block)
+    
+    min, max = Point2D.minmax(point_array)
+    if !bounding_box
+      min = Point2D.new(0,0)
+    end
+    
+    result = Grid.new(max.x - min.x + 1, max.y - min.y + 1, empty)
+    
+    point_array.each { |p|
+      result[p-min] = if block
+        block.call(p)
+      else
+        char
+      end
+    }
+    
+    return result
   end
   
   def minmax(null=nil)
@@ -373,8 +465,7 @@ class Grid
   def to_s
     printBoard()
   end
-  
-  
+    
   #
   # returns a copy of the underlying 2D array, with linking to the content (rather than dup the content also)
   #
@@ -451,10 +542,12 @@ class Grid
     @data.each_with_index { |l, y|
       l.each_with_index { |c, x|
        
-        pos = Point2D.new(x,y)
-        
-        if overlay && overlay.has_key?(pos)
-          result += overlay[pos] 
+        if overlay 
+          pos = Point2D.new(x,y)
+          if overlay.has_key?(pos)
+            result += overlay[pos]
+          end
+          next
         else
           result += c.to_s
         end
