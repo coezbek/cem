@@ -19,13 +19,13 @@ RSpec.describe Cem do
     expect(3.14.sqrt).to eq(Math.sqrt(3.14))
   end
   
-  it "provides min()" do
-    expect(min(1,2)).to eq(1)
-    expect(min(2,1)).to eq(1)
-    expect(min(1,1)).to eq(1)
-    expect(min(-3,3)).to eq(-3)
-    expect(min(3,-3)).to eq(-3)
-    expect(min(1.5,1.0)).to eq(1.0)    
+  it "provides min()" do 
+    expect(Cem.min(1,2)).to eq(1)
+    expect(Cem.min(2,1)).to eq(1)
+    expect(Cem.min(1,1)).to eq(1)
+    expect(Cem.min(-3,3)).to eq(-3)
+    expect(Cem.min(3,-3)).to eq(-3)
+    expect(Cem.min(1.5,1.0)).to eq(1.0)    
   end
 end
 
@@ -47,7 +47,7 @@ RSpec.describe Point2D do
     
     it { expect(p.flip.flip).to eq(p) } 
   
-  end
+  end 
     
   describe "#+" do
   
@@ -64,6 +64,58 @@ RSpec.describe Point2D do
     it "provides for scalar multiplication" do 
       expect(p * 3).to eq(Point2D.new(p.x * 3, p.y * 3))
     end  
+  end 
+  
+  describe "#min" do
+    it "returns the minimum coordinate wise of two points" do 
+      expect(p.min(q)).to eq(q)
+    end
+    
+    it "supports arrays as input" do
+      expect(p.min([q])).to eq(q)
+      expect(p.min([q, q, p])).to eq(q)
+    end  
+    
+    it "works with nil" do
+      expect(p.min(nil)).to eq(p)
+      expect(p.min([nil])).to eq(p)
+    end 
+  end 
+  
+  describe "#max" do
+    it "returns the maximum coordinate wise of two points" do 
+      expect(p.max(q)).to eq(p)
+    end
+    
+    it "supports arrays as input" do
+      expect(p.max([q])).to eq(p)
+      expect(p.max([q, q, p])).to eq(p)
+    end  
+    
+    it "works with nil" do
+      expect(p.max(nil)).to eq(p)
+      expect(p.max([nil])).to eq(p)
+    end 
+  end 
+  
+  describe "#minmax" do
+    it "returns the maximum coordinate wise of two points" do 
+      expect(p.minmax(q)).to eq([q, p])
+    end
+    
+    it "supports arrays as input" do
+      expect(p.minmax([q, p, q])).to eq([q, p])
+    end  
+    
+    it "works with nil" do
+      expect(p.minmax([nil])).to eq([p, p])
+      expect(p.minmax(nil)).to eq([p, p])
+    end 
+    
+    it "also available globally" do
+      expect(Point2D.minmax([q, p, q])).to eq([q, p])
+      expect(Point2D.minmax([])).to eq([nil, nil])
+    end 
   end 
       
   it "can parse common coordinates into Point2D" do
