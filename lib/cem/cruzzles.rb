@@ -243,7 +243,7 @@ end
 
 class Grid
 
-  attr_reader :data
+  attr_accessor :data
 
   def initialize(x, y, default=0, &block)
     
@@ -376,8 +376,8 @@ class Grid
   
   def to_a
     return @data.flatten
-  end  
-  
+  end
+    
   #
   # Returns the Point2Ds in the directions NSEW as an array (no diagonals, see adja_index for this)
   #
@@ -482,22 +482,28 @@ class Grid
   #
   # If block has...
   #  - one parameter, passes the cell value
-  #  - two parameters, passes y and x
+  #  - two parameters, passes the coordinates as a Point2D and the cell value
   #  - three parameteres, passes y, x and the cell value
+  #
+  # If the block returns nil, the original value is kept.
   #
   def map_a(&block)
   
     case block.arity
       when 1 
-        @data.map { |row| row.map { |value| block.call(value) } }
+        @data.map { |row| row.map { |value| block.call(value) || value } }
       when 2 
-        @data.each_with_index.map { |row, y| row.each_index.map { |x| block.call(y,x) } }
+        @data.each_with_index.map { |row, y| row.each_with_index.map { |value, x| block.call(Point2D.new(x, y), value) || value } }
       when 3      
-        @data.each_with_index.map { |row, y| row.each_with_index.map { |cell, x| block.call(y,x,cell) } }
+        @data.each_with_index.map { |row, y| row.each_with_index.map { |value, x| block.call(y, x, value) || value} }
       else
         raise
     end
   
+  end
+  
+  def map_a!(&block)
+    @data = map_a(&block)
   end
   
   def each(&block)
