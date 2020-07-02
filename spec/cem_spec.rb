@@ -124,4 +124,104 @@ RSpec.describe Point2D do
     
   end
   
+  describe "#left and #left!" do
+    
+    it "left returns one less in the x coordinate" do
+      expect(p.left).to eq(Point2D.new(p.x - 1, p.y))
+    end
+    
+    it "left does not change self" do
+      p2 = p.dup
+      p.left
+      expect(p).to eq(p2)
+    end
+    
+    it "left! returns one less in the x coordinate" do
+      p2 = p.dup
+      expect(p.left!).to eq(Point2D.new(p2.x - 1, p2.y))
+    end
+    
+    it "left! does change self" do
+      p2 = p.dup
+      p.left!
+      expect(p).to eq(p2.left)
+    end 
+  
+  end
+  
+  describe "#right and #right!" do
+    
+    it "right returns one more in the x coordinate" do
+      expect(p.right).to eq(Point2D.new(p.x + 1, p.y))
+    end
+    
+    it "right does not change self" do
+      p2 = p.dup
+      p.right
+      expect(p).to eq(p2)
+    end
+    
+    it "right! returns one less in the x coordinate" do
+      p2 = p.dup
+      expect(p.right!).to eq(Point2D.new(p2.x + 1, p2.y))
+    end
+    
+    it "right! does change self" do
+      p2 = p.dup
+      p.right!
+      expect(p).to eq(p2.right)
+    end 
+  
+  end
+  
+  describe "#up and #up!" do
+    
+    it "up returns one less in the y coordinate" do
+      expect(p.up).to eq(Point2D.new(p.x, p.y - 1))
+    end
+    
+    it "up does not change self" do
+      p2 = p.dup
+      p.up
+      expect(p).to eq(p2)
+    end
+    
+    it "up! returns one less in the y coordinate" do
+      p2 = p.dup
+      expect(p.up!).to eq(Point2D.new(p2.x, p2.y - 1))
+    end
+    
+    it "up! does change self" do
+      p2 = p.dup
+      p.up!
+      expect(p).to eq(p2.up)
+    end 
+  
+  end
+  
+  describe "#down and #down!" do
+    
+    it "down returns one more in the y coordinate" do
+      expect(p.down).to eq(Point2D.new(p.x, p.y + 1))
+    end
+    
+    it "down does not change self" do
+      p2 = p.dup
+      p.down
+      expect(p).to eq(p2)
+    end
+    
+    it "down! returns one less in the x coordinate" do
+      p2 = p.dup
+      expect(p.down!).to eq(Point2D.new(p2.x, p2.y + 1))
+    end
+    
+    it "down! does change self" do
+      p2 = p.dup
+      p.down!
+      expect(p).to eq(p2.down)
+    end 
+  
+  end
+  
 end

@@ -128,17 +128,44 @@ Point2D = Struct.new("Point2D", :x, :y) {
     [array.reduce { |min, o| min.min(o) }, array.reduce { |max, o| max.max(o) } ]
   end
   
+  def add!(other)
+    self.x += other.x
+    self.y += other.y
+    return self
+  end
+  
   def left 
-    return self + Dir2D.LEFT
+    self + Dir2D::LEFT
   end
   
   def left!
-    x += Dir2D.LEFT.x
-    y += Dir2D.LEFT.y
-    return self
+    add!(Dir2D::LEFT)
   end
 
+  def right 
+    self + Dir2D::RIGHT
+  end
   
+  def right!
+    add!(Dir2D::RIGHT)
+  end
+  
+  def up
+    self + Dir2D::UP
+  end
+  
+  def up!
+    add!(Dir2D::UP)
+  end
+  
+  def down
+    self + Dir2D::DOWN
+  end
+  
+  def down!
+    add!(Dir2D::DOWN)
+  end
+    
   def to_dir_bitmask 
   
     if x == 0 && y == -1
@@ -205,14 +232,14 @@ Seg2D = Struct.new("Seg2D", :p1, :p2) {
   
 }
 
-Dirs2D = [Point2D.new(0, -1), Point2D.new(1, 0), Point2D.new(0, 1), Point2D.new(-1, 0)]
-
 class Dir2D < Point2D
 
   N = UP    = Dir2D.new( 0, -1)
   E = RIGHT = Dir2D.new( 1,  0)
   S = DOWN  = Dir2D.new( 0,  1)
   W = LEFT  = Dir2D.new(-1,  0)
+  
+  All = [N, E, S, W]
   
   #
   # Dir2D * Range = array of Dir2D
@@ -237,9 +264,9 @@ class Dir2D < Point2D
   def self.x(length=1)
     return vert(length) + hori(length)
   end
-
 end
-  
+
+Dirs2D = Dir2D::All
 
 class Grid
 
