@@ -350,6 +350,10 @@ class Grid
     return result
   end
   
+  # Mixin all methods which make sense:
+  #  - Searching if all/any/none/one value matches something
+  append_from(Enumerable, :any?, :all?, :include?, :member?, :none?, :one?, :tally, :count)
+  
   def minmax(null=nil)
     min = nil
     max = nil
@@ -401,7 +405,8 @@ class Grid
     return @data[y][x] = assign
   end
   
-  def to_a
+  # Returns the underlying 2D array as a flattened array
+  def flatten
     return @data.flatten
   end
     
@@ -464,7 +469,7 @@ class Grid
         result << Point2D.new(x-1,y-1)
       end
       result << Point2D.new(x-1,y)
-      if y + 1 < @data.size - 1
+      if y + 1 < @data.size
         result << Point2D.new(x-1, y+1)
       end
     end
@@ -474,15 +479,15 @@ class Grid
     
     # result << Point2D.new(x,y)
     
-    if y + 1 < @data.size - 1
+    if y + 1 < @data.size
       result << Point2D.new(x, y+1)
     end
-    if x + 1 < @data[0].size - 1
+    if x + 1 < @data[0].size
       if y > 0
         result << Point2D.new(x+1,y-1)
       end
       result << Point2D.new(x+1,y)
-      if y + 1 < @data.size - 1
+      if y + 1 < @data.size
         result << Point2D.new(x+1, y+1)
       end
     end
@@ -493,13 +498,13 @@ class Grid
     printBoard()
   end
     
-  #
   # returns a copy of the underlying 2D array, with linking to the content (rather than dup the content also)
-  #
   def to_a
     @data.map { |row| row.dup }
   end
   
+  # Returns access to the underlying 2D array. 
+  # Caution: This is not a duplicate. Use to_a for this.
   def data
     @data
   end

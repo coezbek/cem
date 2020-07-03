@@ -11,6 +11,28 @@ rescue LoadError
   require requireName
 end
 
+#
+# Puts+eql? == peql
+# Performs a equal comparison and outputs the result to console in the form
+#
+# "#{msg}: Expected #{expected}, but got #{actual}"
+#
+# expected may be kept empty, in which case the msg is adjusted
+#
+def peql(actual, expected=:unknown_peql_token, msg=nil)
+  
+  if expected == :unknown_peql_token
+    puts "#{msg}: Didn't know what to expect and got '#{actual}'"
+  else  
+    if actual == expected
+      puts "#{msg}: Expected '#{expected}' and got it!"
+    else
+      puts "#{msg}: Expected '#{expected}', but got '#{actual}!"
+    end
+  end
+  
+end
+
 class File
 
   # Returns the first match of the given files
@@ -24,6 +46,29 @@ class File
   end
 end
 
+class Module
+
+  # Append only the given methods from the given mod(ule)
+  # Adapted from: https://www.ruby-forum.com/t/partial-append-features/66728/12
+  # Why? Enumerable has too many methods to include at once.
+  def append_from( module_to_append_from, *methods_to_keep )
+    methods_to_keep.map! { |m| m.to_sym }
+    
+    methods_to_remove = module_to_append_from.instance_methods(false) - methods_to_keep
+        
+    new_mod = Module.new
+    new_mod.module_eval do
+      include module_to_append_from
+      methods_to_remove.each { |meth| undef_method meth }
+    end
+    
+    # Sanity check:
+    check = methods_to_keep - new_mod.instance_methods(true)
+    raise "The following methods are not in the given module: #{check.inspect}" if !check.empty?
+    
+    include new_mod
+  end
+end
 
 
 class Array
