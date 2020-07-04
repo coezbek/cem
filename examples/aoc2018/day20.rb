@@ -1,6 +1,5 @@
-
 #
-# Puzzle 2018-20
+# https://adventofcode.com/2018/day/20 part 1 and 2
 #
 # Took 1:10 min for both parts (not bad!)
 #
