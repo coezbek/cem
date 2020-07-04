@@ -168,16 +168,17 @@ Point2D = Struct.new("Point2D", :x, :y) {
     
   def to_dir_bitmask 
   
-    if x == 0 && y == -1
+    case self
+    when Dir2D::N
       return 1
-    elsif x == 1 && y == 0
+    when Dir2D::E
       return 2
-    elsif x == 0 && y == 1
+    when Dir2D::S
       return 4
-    elsif x == -1 && y == 0
+    when Dir2D::W
       return 8
     else
-      raise self.p
+      raise "Only Dir2Ds can be converted to direction bitmask: #{self.inspect}"
     end
   end
       
@@ -185,16 +186,16 @@ Point2D = Struct.new("Point2D", :x, :y) {
   
     result = []
     if v & 1 > 0
-      result << Point2D.new(0, -1)
+      result << Dir2D::N
     end
     if v & 2 > 0
-      result << Point2D.new(1, 0)
+      result << Dir2D::E
     end
     if v & 4 > 0
-      result << Point2D.new(0, 1)
+      result << Dir2D::S
     end
     if v & 8 > 0
-      result << Point2D.new(-1, 0)
+      result << Dir2D::W
     end
     return result
   end
@@ -234,10 +235,10 @@ Seg2D = Struct.new("Seg2D", :p1, :p2) {
 
 class Dir2D < Point2D
 
-  N = UP    = Dir2D.new( 0, -1)
-  E = RIGHT = Dir2D.new( 1,  0)
-  S = DOWN  = Dir2D.new( 0,  1)
-  W = LEFT  = Dir2D.new(-1,  0)
+  N = UP    = Dir2D.new( 0, -1).freeze
+  E = RIGHT = Dir2D.new( 1,  0).freeze
+  S = DOWN  = Dir2D.new( 0,  1).freeze
+  W = LEFT  = Dir2D.new(-1,  0).freeze
   
   All = [N, E, S, W]
   
@@ -354,6 +355,8 @@ class Grid
   #  - Searching if all/any/none/one value matches something
   append_from(Enumerable, :any?, :all?, :include?, :member?, :none?, :one?, :tally, :count)
   
+  
+  # Finds the top-left (min), bottom-right (max) coordinates of this Grid using the given value 'null' as an indicator for an empty field.
   def minmax(null=nil)
     min = nil
     max = nil
