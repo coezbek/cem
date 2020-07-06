@@ -1,7 +1,8 @@
 #
-# Puzzle 2018-23
+# https://adventofcode.com/2018/day/23 part 1 and part 2 
 #
-
+# Uses Point3D. I probably need to revisit how to subclass Point3D, Point2D.
+#
 require 'cem'
 
 Bot = Struct.new("Bot", :x, :y, :z, :r) {
