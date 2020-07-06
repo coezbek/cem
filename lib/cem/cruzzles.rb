@@ -644,7 +644,21 @@ Point3D = Struct.new("Point3D", :x, :y, :z) {
     end
   end 
 }
-    
-    
 
-    
+Point4D = Struct.new("Point4D", :x, :y, :z, :w) {
+
+  def manhattan(other=nil)
+    if other != nil
+      return (self - other).manhattan
+    end
+    return x.abs + y.abs + z.abs + w.abs
+  end
+  
+  def -(other)
+    Point4D.new(x - other.x, y - other.y, z - other.z, w - other.w)
+  end
+  
+  def to_s
+    "#{x}, #{y}, #{z}, #{w}"
+  end
+}
