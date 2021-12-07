@@ -41,4 +41,5 @@ Gem::Specification.new do |spec|
   
   # Flammarion is not a runtime dependency, but rather optional
   # spec.add_runtime_dependency 'flammarion', '~> 0.3'
+  spec.add_runtime_dependency "progress_bar", "~> 1.3"
 end

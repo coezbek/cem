@@ -3,12 +3,22 @@
 # Require the given ruby file and if loading fails, try to install the gem of the same name or given parameter
 #
 def crequire(requireName, gem_name = nil)
-  require requireName
-rescue LoadError
-  gem_name = requireName if gem_name.nil?
-  system("gem install #{gem_name}")
-  Gem.clear_paths
-  require requireName
+
+  if defined?(Bundler)    
+    begin
+      require requireName # If run under bundler then crequire is not needed
+    end
+  else
+    begin
+      require requireName
+    rescue LoadError
+      gem_name = requireName if gem_name.nil?
+      system("gem install #{gem_name}")
+      Gem.clear_paths
+      require requireName
+    end
+  end
+
 end
 
 #
