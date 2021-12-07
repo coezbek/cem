@@ -39,5 +39,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 13.0"   # Was: 10.0
   spec.add_development_dependency "rspec", "~> 3.0"
   
-  spec.add_runtime_dependency 'flammarion', '~> 0.3'
+  # Flammarion is not a runtime dependency, but rather optional
+  # spec.add_runtime_dependency 'flammarion', '~> 0.3'
 end
